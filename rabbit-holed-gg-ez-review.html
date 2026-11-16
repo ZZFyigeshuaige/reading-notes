@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rabbit Holed: “GG EZ” 精读 — 中译英复习</title>
+<style>
+:root { --font-size: 19px; --ink: #202124; --muted: #6b7280; --line: #e3e6eb; --paper: #fff; --page: #f4f5f7; --accent: #5b47d6; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--page); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; font-size: var(--font-size); line-height: 1.7; }
+main { max-width: 860px; margin: 32px auto; padding: 38px 48px 52px; }
+h1 { margin: 0 0 8px; font-size: 1.75em; line-height: 1.3; text-align: center; }
+.subtitle { margin: 0 0 28px; color: var(--muted); text-align: center; }
+.progress { margin-bottom: 10px; color: var(--muted); text-align: center; font-size: .9em; }
+.card { min-height: 360px; padding: 54px 48px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 28px; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 10px 36px rgba(35,28,80,.09); cursor: pointer; text-align: center; user-select: none; }
+.prompt-label, .answer-label { color: var(--muted); font-size: .78em; letter-spacing: .12em; }
+.prompt { font-size: 1.28em; font-weight: 600; line-height: 1.65; }
+.answer-wrap { width: 100%; padding-top: 24px; border-top: 1px solid var(--line); }
+.answer { margin-top: 8px; color: #2f238b; font-size: 1.55em; font-weight: 760; line-height: 1.45; }
+.source-wrap { margin-top: 24px; padding: 20px 22px; background: #f7f7fa; border-radius: 12px; text-align: left; }
+.source { margin-top: 8px; font-size: .98em; line-height: 1.65; }
+.source mark { padding: .05em .12em; background: #fff1a8; color: #111; font-weight: 750; border-radius: 3px; }
+.hidden { display: none; }
+.hint { color: var(--muted); font-size: .82em; }
+.buttons { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+button { min-height: 44px; padding: 0 18px; border: 1px solid #d9d6f4; border-radius: 10px; background: #fff; color: #30238e; font: inherit; cursor: pointer; }
+button.primary { background: #5b47d6; color: #fff; border-color: #5b47d6; }
+button:hover { filter: brightness(.97); }
+.size-controls { position: fixed; right: 22px; bottom: 22px; display: flex; gap: 8px; padding: 8px; background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 3px 16px rgba(0,0,0,.12); }
+.size-controls button { width: 42px; min-height: 38px; padding: 0; background: #eceafc; font-size: 20px; }
+@media (max-width: 700px) { main { margin: 0; padding: 24px 18px 74px; } .card { min-height: 340px; padding: 38px 24px; } body { --font-size: 18px; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Rabbit Holed: “GG EZ” 精读</h1>
+<p class="subtitle">中译英主动回忆</p>
+<div class="progress" id="progress"></div>
+<section class="card" id="card" tabindex="0" aria-label="点击显示英文答案">
+<div class="prompt-label">中文提示</div>
+<div class="prompt" id="prompt"></div>
+<div class="hint" id="hint">先在心里说出英文，再点击卡片查看答案</div>
+<div class="answer-wrap hidden" id="answerWrap">
+<div class="answer-label">英文答案</div>
+<div class="answer" id="answer"></div>
+<div class="source-wrap">
+<div class="answer-label">文章原句</div>
+<div class="source" id="source"></div>
+</div>
+</div>
+</section>
+<div class="buttons">
+<button type="button" id="prev">← 上一题</button>
+<button type="button" class="primary" id="reveal">显示答案</button>
+<button type="button" id="next">下一题 →</button>
+<button type="button" id="shuffle">随机排序</button>
+</div>
+</main>
+<div class="size-controls" aria-label="字号控制">
+<button type="button" onclick="resizeText(-1)" title="缩小字号">−</button>
+<button type="button" onclick="resizeText(1)" title="放大字号">＋</button>
+</div>
+<script>
+let cards = [{"en":"most-consumed","zh":"被消费最多的","source":"These seven seconds have become probably the most-consumed seven seconds of audiovisual entertainment in the last week of Earth.","sourceHtml":"These seven seconds have become probably the \u003cmark>most-consumed\u003c/mark> seven seconds of audiovisual entertainment in the last week of Earth."},{"en":"sweaty tryhards","zh":"为了赢而过度投入、表现得很“用力”的玩家，往往还带有令人扫兴或惹人烦的意味","source":"Somehow, someway, a seemingly innocuous clip of a normal-looking woman saying internet slang (“gg ez” is often used by sweaty tryhards after they humiliate an opponent in, say, Valorant or League of Legends) has repulsed, intoxicated, and puzzled a vast swath of the internet.","sourceHtml":"Somehow, someway, a seemingly innocuous clip of a normal-looking woman saying internet slang (“gg ez” is often used by \u003cmark>sweaty tryhards\u003c/mark> after they humiliate an opponent in, say, Valorant or League of Legends) has repulsed, intoxicated, and puzzled a vast swath of the internet."},{"en":"a vast swath of the internet","zh":"互联网上一大片人群／相当广泛的网络空间","source":"Somehow, someway, a seemingly innocuous clip of a normal-looking woman saying internet slang (“gg ez” is often used by sweaty tryhards after they humiliate an opponent in, say, Valorant or League of Legends) has repulsed, intoxicated, and puzzled a vast swath of the internet.","sourceHtml":"Somehow, someway, a seemingly innocuous clip of a normal-looking woman saying internet slang (“gg ez” is often used by sweaty tryhards after they humiliate an opponent in, say, Valorant or League of Legends) has repulsed, intoxicated, and puzzled \u003cmark>a vast swath of the internet\u003c/mark>."},{"en":"trade lines","zh":"轮流接话、轮流唱句子","source":"The way they trade lines and whoop over the beat simulates the adrenaline rush of a quick move in a game.","sourceHtml":"The way they \u003cmark>trade lines\u003c/mark> and whoop over the beat simulates the adrenaline rush of a quick move in a game."},{"en":"rawr XD visual tic","zh":"一种带有 2000 年代网络非主流／二次元卖萌气质的视觉习惯动作","source":"The video is practically just a rawr XD visual tic—rather than say the expletive, the woman goes for the “furking.” It’s perfectly calibrated Broad City-humor ragebait.","sourceHtml":"The video is practically just a \u003cmark>rawr XD visual tic\u003c/mark>—rather than say the expletive, the woman goes for the “furking.” It’s perfectly calibrated Broad City-humor ragebait."},{"en":"perfectly calibrated","zh":"精确调校到恰到好处","source":"The video is practically just a rawr XD visual tic—rather than say the expletive, the woman goes for the “furking.” It’s perfectly calibrated Broad City-humor ragebait.","sourceHtml":"The video is practically just a rawr XD visual tic—rather than say the expletive, the woman goes for the “furking.” It’s \u003cmark>perfectly calibrated\u003c/mark> Broad City-humor ragebait."},{"en":"ragebait","zh":"通过故意惹人生气来骗取点击、评论和转发的内容","source":"The video is practically just a rawr XD visual tic—rather than say the expletive, the woman goes for the “furking.” It’s perfectly calibrated Broad City-humor ragebait.","sourceHtml":"The video is practically just a rawr XD visual tic—rather than say the expletive, the woman goes for the “furking.” It’s perfectly calibrated Broad City-humor \u003cmark>ragebait\u003c/mark>."},{"en":"backtrack","zh":"倒回去讲，回溯前情","source":"Let’s backtrack a bit.","sourceHtml":"Let’s \u003cmark>backtrack\u003c/mark> a bit."},{"en":"spawned a dance trend","zh":"催生了一股舞蹈潮流","source":"It spawned a dance trend in the K- and J-pop worlds with idols like BTS’ Jung Kook and iTZY’s Yeji, which was controversial because fans of these artists quickly clocked the tinny glimmer of AI in the robotic vocals.","sourceHtml":"It \u003cmark>spawned a dance trend\u003c/mark> in the K- and J-pop worlds with idols like BTS’ Jung Kook and iTZY’s Yeji, which was controversial because fans of these artists quickly clocked the tinny glimmer of AI in the robotic vocals."},{"en":"clocked the tinny glimmer of AI","zh":"察觉到了 那种单薄、金属般发亮的痕迹","source":"It spawned a dance trend in the K- and J-pop worlds with idols like BTS’ Jung Kook and iTZY’s Yeji, which was controversial because fans of these artists quickly clocked the tinny glimmer of AI in the robotic vocals.","sourceHtml":"It spawned a dance trend in the K- and J-pop worlds with idols like BTS’ Jung Kook and iTZY’s Yeji, which was controversial because fans of these artists quickly \u003cmark>clocked the tinny glimmer of AI\u003c/mark> in the robotic vocals."},{"en":"mewls","zh":"细弱、娇软、近似小猫叫的声音","source":"They got permission from M.Sasuke and remade the song with their own mewls.","sourceHtml":"They got permission from M.Sasuke and remade the song with their own \u003cmark>mewls\u003c/mark>."},{"en":"filtered through the prism of Discord geeks","zh":"经过 宅人视角的折射","source":"It’s a love-hate narrative of toxic love, filtered through the prism of Discord geeks who can’t stop saying shit like “oneshot” and “low HP.” Besides a pop of Jersey club and a crescendoing final bit, it’s pretty much the same lowkey synths and mouse-click drums the whole time.","sourceHtml":"It’s a love-hate narrative of toxic love, \u003cmark>filtered through the prism of Discord geeks\u003c/mark> who can’t stop saying shit like “oneshot” and “low HP.” Besides a pop of Jersey club and a crescendoing final bit, it’s pretty much the same lowkey synths and mouse-click drums the whole time."},{"en":"lowkey synths and mouse-click drums","zh":"低调克制的合成器与鼠标点击般的鼓点","source":"It’s a love-hate narrative of toxic love, filtered through the prism of Discord geeks who can’t stop saying shit like “oneshot” and “low HP.” Besides a pop of Jersey club and a crescendoing final bit, it’s pretty much the same lowkey synths and mouse-click drums the whole time.","sourceHtml":"It’s a love-hate narrative of toxic love, filtered through the prism of Discord geeks who can’t stop saying shit like “oneshot” and “low HP.” Besides a pop of Jersey club and a crescendoing final bit, it’s pretty much the same \u003cmark>lowkey synths and mouse-click drums\u003c/mark> the whole time."},{"en":"tide himself over","zh":"靠某物暂时维持、撑过一段时间","source":"Kaien’s character begins as an average gamer, who tides himself over with a few skin purchases and Valorant wins.","sourceHtml":"Kaien’s character begins as an average gamer, who \u003cmark>tides himself over\u003c/mark> with a few skin purchases and Valorant wins."},{"en":"gigachad femme fatale","zh":"兼具“终极强者／压倒性气场”和“危险迷人女性”形象的角色","source":"Then she arrives: the gigachad femme fatale ready to unseat him from his pedestal.","sourceHtml":"Then she arrives: the \u003cmark>gigachad femme fatale\u003c/mark> ready to unseat him from his pedestal."},{"en":"unseat him from his pedestal","zh":"把他从高位／神坛上拉下来","source":"Then she arrives: the gigachad femme fatale ready to unseat him from his pedestal.","sourceHtml":"Then she arrives: the gigachad femme fatale ready to \u003cmark>unseat\u003c/mark> \u003cmark>him\u003c/mark> from his \u003cmark>pedestal\u003c/mark>."},{"en":"gained traction","zh":"开始获得关注并形成传播势头","source":"It originally gained traction on X as part of a joke where musicians pretended they had produced the song.","sourceHtml":"It originally \u003cmark>gained traction\u003c/mark> on X as part of a joke where musicians pretended they had produced the song."},{"en":"thirsting after","zh":"在网上毫不掩饰地表达对某人的性吸引或迷恋","source":"Then it became a mix of people thirsting after Sugar and saying things like “Nuke all valorant servers immediately.” Users overlaid the video with Geordie Greep songs and flipped OsamaSon’s “Werkin” into GG EZ rageslop and compared the track to “Ninajirachi pre girl edm” and made crazed edits just a week too late for my stutter column.","sourceHtml":"Then it became a mix of people \u003cmark>thirsting after\u003c/mark> Sugar and saying things like “Nuke all valorant servers immediately.” Users overlaid the video with Geordie Greep songs and flipped OsamaSon’s “Werkin” into GG EZ rageslop and compared the track to “Ninajirachi pre girl edm” and made crazed edits just a week too late for my stutter column."},{"en":"GG EZ rageslop","zh":"围绕这条迷因制造的暴怒式网络垃圾内容","source":"Then it became a mix of people thirsting after Sugar and saying things like “Nuke all valorant servers immediately.” Users overlaid the video with Geordie Greep songs and flipped OsamaSon’s “Werkin” into GG EZ rageslop and compared the track to “Ninajirachi pre girl edm” and made crazed edits just a week too late for my stutter column.","sourceHtml":"Then it became a mix of people thirsting after Sugar and saying things like “Nuke all valorant servers immediately.” Users overlaid the video with Geordie Greep songs and flipped OsamaSon’s “Werkin” into \u003cmark>GG EZ rageslop\u003c/mark> and compared the track to “Ninajirachi pre girl edm” and made crazed edits just a week too late for my stutter column."},{"en":"cashed in","zh":"利用眼前的热度、机会或名声获利","source":"The professional eSports team Sentinels cashed in, while League of Legends legend Doublelift declared that it should be Valorant’s official theme.","sourceHtml":"The professional eSports team Sentinels \u003cmark>cashed in\u003c/mark>, while League of Legends legend Doublelift declared that it should be Valorant’s official theme."},{"en":"remix so fine it’s like brushing your ear on a charmeuse gown","zh":"精美得仿佛耳朵擦过一袭真丝缎礼服的混音","source":"Digicore artists gunk, zayok, and edyn made a remix so fine it’s like brushing your ear on a charmeuse gown.","sourceHtml":"Digicore artists gunk, zayok, and edyn made a \u003cmark>remix so fine it’s like brushing your ear on a charmeuse gown\u003c/mark>."},{"en":"mind-state","zh":"创作时的精神状态与思维模式","source":"I DMed zayok to understand the mind-state they were in when sculpting the remix.","sourceHtml":"I DMed zayok to understand the \u003cmark>mind-state\u003c/mark> they were in when sculpting the remix."},{"en":"sculpting the remix","zh":"像雕塑一样塑造混音","source":"I DMed zayok to understand the mind-state they were in when sculpting the remix.","sourceHtml":"I DMed zayok to understand the mind-state they were in when \u003cmark>sculpting the remix\u003c/mark>."},{"en":"fake whimsy","zh":"刻意装出来的天真、古怪和俏皮感","source":"“The original song has this fake whimsy to it where it’s like, farking easy.","sourceHtml":"“The original song has this \u003cmark>fake whimsy\u003c/mark> to it where it’s like, farking easy."},{"en":"play it straight","zh":"不挤眉弄眼、不把作品当笑话，而是用认真直接的方式处理本来可能很荒诞的材料","source":"What’s really cool about ours is that we play it straight.","sourceHtml":"What’s really cool about ours is that \u003cmark>we play it straight\u003c/mark>."},{"en":"dicking around","zh":"胡闹、瞎玩、没有严肃目的地试东西","source":"Me and my friends were dicking around and made something truly beautiful.”","sourceHtml":"Me and my friends were \u003cmark>dicking around\u003c/mark> and made something truly beautiful.”"},{"en":"less generous and generative approach","zh":"既不宽容、也不能产生新东西的处理方式","source":"A lot of internet users took a less generous and generative approach.","sourceHtml":"A lot of internet users took a \u003cmark>less generous and generative approach\u003c/mark>."},{"en":"microwaves stale flaps of internet culture","zh":"把网络文化中陈旧的残片放进微波炉重新加热","source":"Some of the hate clearly comes from the fact that “GG EZ” is just sleek enough to be listenable, while the subject matter microwaves stale flaps of internet culture à la “Pokémon Go to the polls!” Zoomers might also see a reflection of themselves, or their younger Fortnite-brained selves, that they now find embarrassing.","sourceHtml":"Some of the hate clearly comes from the fact that “GG EZ” is just sleek enough to be listenable, while the subject matter \u003cmark>microwaves stale flaps of internet culture\u003c/mark> à la “Pokémon Go to the polls!” Zoomers might also see a reflection of themselves, or their younger Fortnite-brained selves, that they now find embarrassing."},{"en":"Fortnite-brained selves","zh":"曾经满脑子都是《堡垒之夜》式网络文化的自己","source":"Some of the hate clearly comes from the fact that “GG EZ” is just sleek enough to be listenable, while the subject matter microwaves stale flaps of internet culture à la “Pokémon Go to the polls!” Zoomers might also see a reflection of themselves, or their younger Fortnite-brained selves, that they now find embarrassing.","sourceHtml":"Some of the hate clearly comes from the fact that “GG EZ” is just sleek enough to be listenable, while the subject matter microwaves stale flaps of internet culture à la “Pokémon Go to the polls!” Zoomers might also see a reflection of themselves, or their younger \u003cmark>Fortnite-brained selves\u003c/mark>, that they now find embarrassing."},{"en":"specialized in","zh":"专门从事、专攻某一类工作或内容","source":"Since last year, Kaien has specialized in vocal and instrumental covers of Brazilian phonk, the mega-popular slop genre of turbo-distorto techno popular in aura mogging compilations.","sourceHtml":"Since last year, Kaien has \u003cmark>specialized in\u003c/mark> vocal and instrumental covers of Brazilian phonk, the mega-popular slop genre of turbo-distorto techno popular in aura mogging compilations."},{"en":"slop genre of turbo-distorto techno","zh":"一种把失真和速度感推到极致的流水线“垃圾音乐”类型","source":"Since last year, Kaien has specialized in vocal and instrumental covers of Brazilian phonk, the mega-popular slop genre of turbo-distorto techno popular in aura mogging compilations.","sourceHtml":"Since last year, Kaien has specialized in vocal and instrumental covers of Brazilian phonk, the mega-popular \u003cmark>slop genre of turbo-distorto techno\u003c/mark> popular in aura mogging compilations."},{"en":"aura mogging compilations","zh":"展示某人在气场、外形或存在感上彻底压倒他人的混剪","source":"Since last year, Kaien has specialized in vocal and instrumental covers of Brazilian phonk, the mega-popular slop genre of turbo-distorto techno popular in aura mogging compilations.","sourceHtml":"Since last year, Kaien has specialized in vocal and instrumental covers of Brazilian phonk, the mega-popular slop genre of turbo-distorto techno popular in \u003cmark>aura mogging compilations\u003c/mark>."},{"en":"a dizzying array of instruments","zh":"多得令人眼花缭乱的一整套乐器","source":"In one clip, he got a musician to do a live zither phonk remix; another video covers the insipid genre with a dizzying array of instruments from piano to erhu to dizi to violin to saxophone to guzheng to suona.","sourceHtml":"In one clip, he got a musician to do a live zither phonk remix; another video covers the insipid genre with a \u003cmark>dizzying array of instruments\u003c/mark> from piano to erhu to dizi to violin to saxophone to guzheng to suona."},{"en":"humanizing inhuman music","zh":"为非人的音乐注入人的痕迹、身体感与情绪","source":"He’s essentially humanizing inhuman music, and “GG EZ” is a step beyond that: reworking a popular AI song so it’s more “ethical,” lifelike, distinctly offbeat.","sourceHtml":"He’s essentially \u003cmark>humanizing inhuman music\u003c/mark>, and “GG EZ” is a step beyond that: reworking a popular AI song so it’s more “ethical,” lifelike, distinctly offbeat."},{"en":"a step beyond that","zh":"在已有做法上更进一步","source":"He’s essentially humanizing inhuman music, and “GG EZ” is a step beyond that: reworking a popular AI song so it’s more “ethical,” lifelike, distinctly offbeat.","sourceHtml":"He’s essentially humanizing inhuman music, and “GG EZ” is \u003cmark>a step beyond that\u003c/mark>: reworking a popular AI song so it’s more “ethical,” lifelike, distinctly offbeat."},{"en":"wasteland of passive-listening prompts","zh":"由被动收听和提示词生产构成的荒原","source":"As online music degrades into a wasteland of passive-listening prompts, maybe these dippy covers and trash-genres-turned-tasteful edits will become in vogue.","sourceHtml":"As online music degrades into a \u003cmark>wasteland of passive-listening prompts\u003c/mark>, maybe these dippy covers and trash-genres-turned-tasteful edits will become in vogue."},{"en":"trash-genres-turned-tasteful edits","zh":"把垃圾流派改造成有品位版本的再编辑","source":"As online music degrades into a wasteland of passive-listening prompts, maybe these dippy covers and trash-genres-turned-tasteful edits will become in vogue.","sourceHtml":"As online music degrades into a wasteland of passive-listening prompts, maybe these dippy covers and \u003cmark>trash-genres-turned-tasteful edits\u003c/mark> will become in vogue."},{"en":"become in vogue","zh":"开始流行、成为风尚","source":"As online music degrades into a wasteland of passive-listening prompts, maybe these dippy covers and trash-genres-turned-tasteful edits will become in vogue.","sourceHtml":"As online music degrades into a wasteland of passive-listening prompts, maybe these dippy covers and trash-genres-turned-tasteful edits will \u003cmark>become in vogue\u003c/mark>."}];
+let index = 0;
+let revealed = false;
+const promptEl = document.getElementById('prompt');
+const answerEl = document.getElementById('answer');
+const sourceEl = document.getElementById('source');
+const answerWrap = document.getElementById('answerWrap');
+const hint = document.getElementById('hint');
+const progress = document.getElementById('progress');
+const revealButton = document.getElementById('reveal');
+function render() {
+  const card = cards[index];
+  promptEl.textContent = card.zh;
+  answerEl.textContent = card.en;
+  sourceEl.innerHTML = card.sourceHtml;
+  progress.textContent = `${index + 1} / ${cards.length}`;
+  revealed = false;
+  answerWrap.classList.add('hidden');
+  hint.classList.remove('hidden');
+  revealButton.textContent = '显示答案';
+}
+function reveal() {
+  revealed = !revealed;
+  answerWrap.classList.toggle('hidden', !revealed);
+  hint.classList.toggle('hidden', revealed);
+  revealButton.textContent = revealed ? '重新隐藏' : '显示答案';
+}
+function move(delta) { index = (index + delta + cards.length) % cards.length; render(); }
+function shuffle() {
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  index = 0;
+  render();
+}
+document.getElementById('card').addEventListener('click', reveal);
+revealButton.addEventListener('click', reveal);
+document.getElementById('prev').addEventListener('click', () => move(-1));
+document.getElementById('next').addEventListener('click', () => move(1));
+document.getElementById('shuffle').addEventListener('click', shuffle);
+document.addEventListener('keydown', (event) => {
+  if (event.code === 'Space') { event.preventDefault(); reveal(); }
+  if (event.key === 'ArrowLeft') move(-1);
+  if (event.key === 'ArrowRight') move(1);
+});
+let textSize = Number(localStorage.getItem('reading-font-size')) || 19;
+function applyTextSize() { document.documentElement.style.setProperty('--font-size', textSize + 'px'); localStorage.setItem('reading-font-size', textSize); }
+function resizeText(delta) { textSize = Math.max(15, Math.min(30, textSize + delta)); applyTextSize(); }
+applyTextSize();
+render();
+</script>
+</body>
+</html>

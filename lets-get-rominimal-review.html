@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本文值得记住的表达 — 中译英复习</title>
+<style>
+:root { --font-size: 19px; --ink: #202124; --muted: #6b7280; --line: #e3e6eb; --paper: #fff; --page: #f4f5f7; --accent: #5b47d6; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--page); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; font-size: var(--font-size); line-height: 1.7; }
+main { max-width: 860px; margin: 32px auto; padding: 38px 48px 52px; }
+h1 { margin: 0 0 8px; font-size: 1.75em; line-height: 1.3; text-align: center; }
+.subtitle { margin: 0 0 28px; color: var(--muted); text-align: center; }
+.progress { margin-bottom: 10px; color: var(--muted); text-align: center; font-size: .9em; }
+.card { min-height: 360px; padding: 54px 48px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 28px; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 10px 36px rgba(35,28,80,.09); cursor: pointer; text-align: center; user-select: none; }
+.prompt-label, .answer-label { color: var(--muted); font-size: .78em; letter-spacing: .12em; }
+.prompt { font-size: 1.28em; font-weight: 600; line-height: 1.65; }
+.answer-wrap { width: 100%; padding-top: 24px; border-top: 1px solid var(--line); }
+.answer { margin-top: 8px; color: #2f238b; font-size: 1.55em; font-weight: 760; line-height: 1.45; }
+.source-wrap { margin-top: 24px; padding: 20px 22px; background: #f7f7fa; border-radius: 12px; text-align: left; }
+.source { margin-top: 8px; font-size: .98em; line-height: 1.65; }
+.source mark { padding: .05em .12em; background: #fff1a8; color: #111; font-weight: 750; border-radius: 3px; }
+.hidden { display: none; }
+.hint { color: var(--muted); font-size: .82em; }
+.buttons { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+button { min-height: 44px; padding: 0 18px; border: 1px solid #d9d6f4; border-radius: 10px; background: #fff; color: #30238e; font: inherit; cursor: pointer; }
+button.primary { background: #5b47d6; color: #fff; border-color: #5b47d6; }
+button:hover { filter: brightness(.97); }
+.size-controls { position: fixed; right: 22px; bottom: 22px; display: flex; gap: 8px; padding: 8px; background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 3px 16px rgba(0,0,0,.12); }
+.size-controls button { width: 42px; min-height: 38px; padding: 0; background: #eceafc; font-size: 20px; }
+@media (max-width: 700px) { main { margin: 0; padding: 24px 18px 74px; } .card { min-height: 340px; padding: 38px 24px; } body { --font-size: 18px; } }
+</style>
+</head>
+<body>
+<main>
+<h1>本文值得记住的表达</h1>
+<p class="subtitle">中译英主动回忆</p>
+<div class="progress" id="progress"></div>
+<section class="card" id="card" tabindex="0" aria-label="点击显示英文答案">
+<div class="prompt-label">中文提示</div>
+<div class="prompt" id="prompt"></div>
+<div class="hint" id="hint">先在心里说出英文，再点击卡片查看答案</div>
+<div class="answer-wrap hidden" id="answerWrap">
+<div class="answer-label">英文答案</div>
+<div class="answer" id="answer"></div>
+<div class="source-wrap">
+<div class="answer-label">文章原句</div>
+<div class="source" id="source"></div>
+</div>
+</div>
+</section>
+<div class="buttons">
+<button type="button" id="prev">← 上一题</button>
+<button type="button" class="primary" id="reveal">显示答案</button>
+<button type="button" id="next">下一题 →</button>
+<button type="button" id="shuffle">随机排序</button>
+</div>
+</main>
+<div class="size-controls" aria-label="字号控制">
+<button type="button" onclick="resizeText(-1)" title="缩小字号">−</button>
+<button type="button" onclick="resizeText(1)" title="放大字号">＋</button>
+</div>
+<script>
+let cards = [{"en":"bring to mind","zh":"使人想到","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a bastion for the genre","zh":"这一流派的堡垒、重镇","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"weave elements of A into B","zh":"把 的元素巧妙编织进","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"regional strain","zh":"某种流派的地域性分支","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"swung and balmy","zh":"节奏有摇摆感，整体温暖舒缓","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"be primed for","zh":"非常适合、已为某种用途做好准备","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"tend to be evasive","zh":"往往含糊其辞、避免正面回应","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"come of age","zh":"长大成人","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"circulate amongst fans","zh":"在乐迷之间流传、传阅","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"take shape in the aftermath","zh":"在事件结束后的余波中逐渐成形","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"an explosion of creativity in every direction","zh":"创造力向各个方向集中爆发","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a hunger to experiment, discover, and express yourself","zh":"对实验、发现与自我表达的强烈渴望","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"grow from that exact energy","zh":"正是从那股能量中生长出来","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"ground zero for cultural education","zh":"文化启蒙最初发生的核心现场","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"carry on the legacy","zh":"继承并延续前人的传统或遗产","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"in its heyday","zh":"在其全盛期、黄金时期","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"scrappy, debauched, and insular","zh":"草根粗粝、纵情放荡而且相对封闭","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"an annual staple","zh":"每年固定出现、不可或缺的活动","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a cornerstone of the movement","zh":"这一运动的基石、关键支柱","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a surge of popularity","zh":"人气突然大幅上升","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"trends du jour","zh":"当下最流行的潮流","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"bring a barrenness to bustling floors","zh":"把空旷、稀疏的声音带进喧闹舞池","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"subtly endure","zh":"不显眼却持续存在","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"be poised for a second boom","zh":"蓄势等待第二次繁荣或爆发","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"be slotted on bills","zh":"被安排进演出阵容","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"the scene moves in cycles","zh":"一个音乐场景以周期方式兴衰、更替","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a new wave slowly building again","zh":"一股新浪潮正在重新缓慢积聚","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"find a way to reinvent itself","zh":"总能找到重新塑造自身的方法","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"provide a score for that event","zh":"为那场活动提供配乐","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"start spinning","zh":"开始做 、播放唱片","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"pliable and deep","zh":"柔韧多变而且深邃","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"comprised of originals","zh":"全部由原创曲目组成","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"simple and gnarled","zh":"简洁却又扭结复杂","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"brittle percussion and woody timbres","zh":"脆硬的打击乐与木质音色","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a holographic rendering of someone’s fingerprint","zh":"对某人鲜明风格的立体再现","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"veer in a direction","zh":"突然或逐渐转向某个方向","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"crunchy and rhythmic","zh":"质感粗粝、有颗粒感，同时节奏鲜明","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a compelling detour","zh":"一次引人入胜的风格偏航","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"wiry arpeggiations","zh":"纤细、紧绷如金属丝的琶音进行","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"tiptoe between trebly clacking","zh":"在高频咔嗒声之间踮脚穿行","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"splash sonic color across a barren canvas","zh":"在空旷的画布上泼洒声音色彩","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"surface in the orbit of","zh":"在某个团体或厂牌的周边圈子中崭露头角","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"attract the ear of","zh":"吸引某类听众的注意","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"snarling and cavernous","zh":"带着咆哮感，同时空间深广如洞穴","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"lilting grooves","zh":"轻盈摇曳、富于起伏的律动","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"dazed chords","zh":"朦胧恍惚的和弦","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"crafted from leather and elastic","zh":"仿佛由皮革和弹性材料制成","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"establish one’s footing","zh":"站稳脚跟、确立自己的位置","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a precocious teenager","zh":"早熟且才华早现的青少年","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"slinky","zh":"柔滑蜿蜒、略带性感","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"whispery voices and pearly textures laid over beats","zh":"耳语般的人声与珍珠般的音色纹理铺在节拍之上","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"remain in forward motion","zh":"始终保持向前运动","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"crispy and pristine","zh":"清脆而洁净","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"have a knack for","zh":"特别擅长、天生会处理某件事","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"nuanced darkness","zh":"具有细微层次的阴暗氛围","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"a commanding solo producer","zh":"掌控力强、令人信服的独立制作人","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"proggy","zh":"带有 倾向的","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"bewitching in its repetition","zh":"在反复循环中产生迷人甚至如施魔法般的效果","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"stumble upon","zh":"偶然发现、无意间接触到","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"have a mastery of","zh":"熟练掌握、精通","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"favor a compact process","zh":"偏好紧凑精简的工作流程","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"laser-y melodies","zh":"如激光般明亮、锐利且线条清晰的旋律","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"mingle with sharp sequencing","zh":"与锋利清晰的音序交融","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"at its funkiest","zh":"处于最有放克律动、最让身体摆动的状态","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"join forces","zh":"联手合作","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"push something to euphoric heights","zh":"把某物推向高度欣快、近乎狂喜的境地","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"bubbly","zh":"轻快活泼、像气泡般跳跃","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"propel translucent synth stabs","zh":"推动半透明质感的合成器短促击奏不断前进","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"throaty synthesizer","zh":"带有低沉喉音、略显沙哑共鸣的合成器音色","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"stripped back, but boisterous","zh":"元素被精简到很少，却仍喧闹有力、精力旺盛","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"unrestrained","zh":"不受拘束的、毫不收敛的","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"balance approachability with the avant-garde","zh":"在易于接近的听感与先锋实验之间取得平衡","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"as abrasive as it is insistent","zh":"既粗粝刺耳，又执拗有力","source":"### 英文原文","sourceHtml":"### 英文原文"},{"en":"be united by a sense of jumpiness","zh":"由一种跳跃不安的感觉贯穿并连成整体","source":"### 英文原文","sourceHtml":"### 英文原文"}];
+let index = 0;
+let revealed = false;
+const promptEl = document.getElementById('prompt');
+const answerEl = document.getElementById('answer');
+const sourceEl = document.getElementById('source');
+const answerWrap = document.getElementById('answerWrap');
+const hint = document.getElementById('hint');
+const progress = document.getElementById('progress');
+const revealButton = document.getElementById('reveal');
+function render() {
+  const card = cards[index];
+  promptEl.textContent = card.zh;
+  answerEl.textContent = card.en;
+  sourceEl.innerHTML = card.sourceHtml;
+  progress.textContent = `${index + 1} / ${cards.length}`;
+  revealed = false;
+  answerWrap.classList.add('hidden');
+  hint.classList.remove('hidden');
+  revealButton.textContent = '显示答案';
+}
+function reveal() {
+  revealed = !revealed;
+  answerWrap.classList.toggle('hidden', !revealed);
+  hint.classList.toggle('hidden', revealed);
+  revealButton.textContent = revealed ? '重新隐藏' : '显示答案';
+}
+function move(delta) { index = (index + delta + cards.length) % cards.length; render(); }
+function shuffle() {
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  index = 0;
+  render();
+}
+document.getElementById('card').addEventListener('click', reveal);
+revealButton.addEventListener('click', reveal);
+document.getElementById('prev').addEventListener('click', () => move(-1));
+document.getElementById('next').addEventListener('click', () => move(1));
+document.getElementById('shuffle').addEventListener('click', shuffle);
+document.addEventListener('keydown', (event) => {
+  if (event.code === 'Space') { event.preventDefault(); reveal(); }
+  if (event.key === 'ArrowLeft') move(-1);
+  if (event.key === 'ArrowRight') move(1);
+});
+let textSize = Number(localStorage.getItem('reading-font-size')) || 19;
+function applyTextSize() { document.documentElement.style.setProperty('--font-size', textSize + 'px'); localStorage.setItem('reading-font-size', textSize); }
+function resizeText(delta) { textSize = Math.max(15, Math.min(30, textSize + delta)); applyTextSize(); }
+applyTextSize();
+render();
+</script>
+</body>
+</html>
